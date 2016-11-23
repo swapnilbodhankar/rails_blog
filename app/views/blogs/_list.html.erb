@@ -1,0 +1,19 @@
+        <% blogs.each do |blog| %>
+                <h2>
+                    <a href="/blogs/<%= blog.id%>"><%= blog.title %></a>
+                </h2>
+                <p class="lead">
+                    by <%= blog.author %>
+                </p>
+                <p><i class="fa fa-clock-o"></i>  Posted on <% if blog.created_at > Time.now.beginning_of_day %>
+                     <%="#{time_ago_in_words(blog.created_at)} ago"%>
+                    <% else %>
+                      <%= blog.created_at.strftime("%b %d, %Y") %>
+                    <% end %></p>
+                <hr>
+                
+                <p><%=  truncate( raw( sanitize(simple_format(blog.description), :tags => %w(table tr td), :attributes => %w(id class style) ) ), :length => 150, :omission => "...").html_safe %></p>
+                <a class="btn btn-primary" href="/blogs/<%= blog.id%>">Read More <span class="glyphicon glyphicon-chevron-right"></span></a>
+
+                <hr>
+                 <% end %>

@@ -1,0 +1,55 @@
+
+
+
+
+     <div class="row">
+
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+
+                <h1 class="page-header">
+                   Blog
+                   
+                </h1>
+
+                     <div class="col-md-6">
+                   <div class="form-group">
+                  <strong>Title:</strong>
+                    <%= @blog.title %>
+                  </div>
+                   <div class="form-group">
+                   <strong>Description:</strong>
+                     <%= @blog.description %>
+                  </div>
+                  <div class="form-group">
+                   <strong>By:</strong>
+                     <%= @blog.description %>
+                  </div>
+                  <div class="form-group">
+                   <strong>Category:</strong>
+                    <%= @blog.category_name %>
+                  </div>
+
+                   <div class="form-group">
+                   <strong>Psoted On:</strong>
+                    <% if @blog.created_at > Time.now.beginning_of_day %>
+                     <%="#{time_ago_in_words(@blog.created_at)} ago"%>
+                    <% else %>
+                      <%= @blog.created_at.strftime("%b %d, %Y") %>
+                    <% end %>
+                  </div>
+                  
+           <div class="form-group">
+            <%= link_to 'Edit', edit_blog_path(@blog), :class=>"btn btn-sm btn-success" %> 
+			<%= link_to 'Back', blogs_path, :class=>"btn btn-sm btn-danger" %>
+              <br><br>
+
+            </div>
+
+         </div>
+</div>
+</div>
+
+
+
+

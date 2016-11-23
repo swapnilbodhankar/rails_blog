@@ -1,0 +1,139 @@
+
+
+
+
+
+
+
+     <div class="row">
+
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+            <div style="float: right;padding-bottom: 10px;padding-right: 15px;" id='sort_by_publish_div'>   
+          <span class="label" style="color: #006DCC;font-size: 13px;">Sort by</span>
+          <select name="OrderingOption" id="OrderingOption" class="form-control">
+                      <option value="Popular">Popular</option>
+                      <option value="DatePublished_Desc" selected="">Published (Latest)</option>
+                      <option value="DatePublished_Asc">Published (Oldest)</option>
+                   
+                      
+          </select>
+        </div> 
+   
+                <h1 class="page-header">
+                    Blogs
+                   
+                </h1>
+
+
+
+
+      <div id="blogs_list">
+        <%= render(partial: 'list', locals: { blogs: @blogs }) %>
+      </div>
+<div class="pull-left">
+<%= link_to 'New Blog', new_blog_path,:class => "btn btn-success btn-xs" %>
+</div>
+                        <div class="pull-right">
+                                <%= will_paginate @blogs, renderer: BootstrapPagination::Rails %>
+
+                            </div>
+     
+
+            </div>
+
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
+
+                <!-- Blog Search Well -->
+                <div class="well">
+                    <h4>Blog Search</h4>
+                     <%= form_tag blogs_path, :method => 'get', :id => "blogs_search" do %>
+                        <div class="input-group">
+                             <%= text_field_tag :search, params[:search],:class=>"form-control", :id=>"search_blog"%>
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="submit">
+                                    <span class="glyphicon glyphicon-search"></span>
+                            </button>
+                            </span>
+                        </div>
+                     <% end %>
+
+
+                    <!-- /.input-group -->
+                </div>
+
+                <!-- Blog Categories Well -->
+                <div class="well">
+                    <h4>Blog Categories</h4>
+                    <div class="row">
+                        <% Category.all.each_slice(4) do |category_array| -%>
+                              <ul class="nav vertical-nav">
+                                <% category_array.each do |category| %>
+                                  <div class="col-lg-6" >
+                                    <li>
+                                      <a href="/blogs?category_id=<%=category.id%>">
+                                        <%= category.name %>
+                                      </a>
+                                    </li>
+                                  </div>         
+                                <% end -%>  
+                              </ul>
+                            <% end %>
+
+                    </div>
+                    <!-- /.row -->
+                </div>
+
+               
+
+            </div>
+
+        </div>
+<style type="text/css">
+/* For Bluring Result Of reports*/
+.blur-filter {
+    -webkit-filter: blur(2px);
+    -moz-filter: blur(2px);
+    -o-filter: blur(2px);
+    -ms-filter: blur(2px);
+    filter: blur(2px);
+    opacity: 0.7;
+}
+
+</style>
+<script type="text/javascript">
+  $(document).on("change","#OrderingOption", function() {
+  $('#blogs_list').addClass('blur-filter')
+    xhr = $.ajax({
+    url: "/sort.js",
+    type: "post",
+    data:{
+      sort_option: $("#OrderingOption").val()
+    }
+  }).always(function(){
+    $('html, body').animate({
+          scrollTop: 0
+        }, 800);
+  })
+});
+
+   $("#blogs_search").submit(function(event) {
+
+      /* stop form from submitting normally */
+      event.preventDefault();
+
+
+          xhr = $.ajax({
+            url: "/blogs",
+            type: "get",
+            data:{
+              search: $('#search_blog').val()
+            }
+          }).always(function(){
+            $('html, body').animate({
+                  scrollTop: 0
+                }, 800);
+          })
+    });
+</script>

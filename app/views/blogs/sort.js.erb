@@ -1,0 +1,2 @@
+$("#blogs_list").html("<%= escape_javascript(render :partial=>'list',locals:{blogs: @blogs})%>")
+$('#blogs_list').removeClass('blur-filter')
