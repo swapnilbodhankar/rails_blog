@@ -29,7 +29,11 @@
 
 
       <div id="blogs_list">
+      <%if @blogs.empty?%>
+       <h4>No Blog Found</h4>
+      <%else%>
         <%= render(partial: 'list', locals: { blogs: @blogs }) %>
+        <%end%>
       </div>
 <div class="pull-left">
 <%= link_to 'New Blog', new_blog_path,:class => "btn btn-success btn-xs" %>
