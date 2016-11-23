@@ -40,7 +40,9 @@
                 <!-- Blog Comments -->
    <div class="form-group">
             <%= link_to 'Edit', edit_blog_path(@blog), :class=>"btn btn-sm btn-success" %> 
-			<%= link_to 'Back', blogs_path, :class=>"btn btn-sm btn-danger" %>
+
+            <a href="/blogs/<%= @blog.id %>/delete" data-confirm="Are you sure?" data-method="delete" class="btn btn-sm btn-danger" >Delete </a>
+			      <%= link_to 'Back', blogs_path, :class=>"btn btn-sm btn-warning" %>
               <br><br>
 
             </div>
