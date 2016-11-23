@@ -20,6 +20,7 @@ class BlogsController < ApplicationController
   # GET /blogs/1
   # GET /blogs/1.json
   def show
+     @blog_comments = @blog.comments.order("created_at desc")
   end
 
   # GET /blogs/new
@@ -87,7 +88,15 @@ class BlogsController < ApplicationController
       format.js
     end
   end
-
+  
+  def post_comment
+    @blog = Blog.find(params[:blog_id])
+    @blog_comment = Comment.add_comment(params[:comment],params[:name],@blog)
+    @blog_comments = @blog.comments.order("created_at desc")
+    respond_to do |format|
+      format.js
+    end
+  end
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_blog

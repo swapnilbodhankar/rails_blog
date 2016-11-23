@@ -1,0 +1,33 @@
+
+<% @blog_comments.each do |comment| %>
+<div class="commentDetails">
+  <div class="commentDiv">
+    <div class="singleComment">
+
+
+        <div class="commentTitle">
+          <div class="row-fluid">
+            <div class="span1">
+              <img class="alignMiddle pull-left" src="http://bettingfellow.com/images/users/default_avatar.png" style="min-width:0px;  padding-right: 10px;width: 35px;"></div>
+              <div class="span11 commentorInfo">
+                <div class="inner">
+                  <span class="commentorName pull-left"><strong> <%= comment.name %></strong></span>
+                  <span class="pull-right"><% if comment.created_at > Time.now.beginning_of_day %>
+                    <p class="muted"><small > <%="#{time_ago_in_words(comment.created_at)} ago"%></small></p>
+                    <% else %>
+                   <p class="muted"><small > <%= comment.created_at.strftime("%b %d, %Y") %></small></p>
+                    <% end %></span>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="commentInfoContent" style="padding-left: 45px;"><%= comment.comment %></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>
+
+
+
+

@@ -1,55 +1,127 @@
 
 
 
+        <div class="row">
 
-     <div class="row">
+            <!-- Blog Post Content Column -->
+            <div class="col-lg-8">
 
-            <!-- Blog Entries Column -->
-            <div class="col-md-8">
+                <!-- Blog Post -->
 
-                <h1 class="page-header">
-                   Blog
-                   
-                </h1>
+                <!-- Title -->
+                <h1> <%= @blog.title %></h1>
 
-                     <div class="col-md-6">
-                   <div class="form-group">
-                  <strong>Title:</strong>
-                    <%= @blog.title %>
-                  </div>
-                   <div class="form-group">
-                   <strong>Description:</strong>
-                     <%= @blog.description %>
-                  </div>
-                  <div class="form-group">
-                   <strong>By:</strong>
-                     <%= @blog.description %>
-                  </div>
-                  <div class="form-group">
-                   <strong>Category:</strong>
-                    <%= @blog.category_name %>
-                  </div>
+                <!-- Author -->
+                <p class="lead">
+                    by <a href="#">Start Bootstrap</a>
+                </p>
 
-                   <div class="form-group">
-                   <strong>Psoted On:</strong>
-                    <% if @blog.created_at > Time.now.beginning_of_day %>
+                <hr>
+
+                <!-- Date/Time -->
+                <p><span class="glyphicon glyphicon-time"></span> Posted on <% if @blog.created_at > Time.now.beginning_of_day %>
                      <%="#{time_ago_in_words(@blog.created_at)} ago"%>
                     <% else %>
                       <%= @blog.created_at.strftime("%b %d, %Y") %>
-                    <% end %>
-                  </div>
-                  
-           <div class="form-group">
+                    <% end %></p>
+
+                <hr>
+
+                <!-- Preview Image -->
+             
+
+                <hr>
+
+                <!-- Post Content -->
+                <p ><%= simple_format(@blog.description, {}, :sanitize => false) %> </p>
+
+                <hr>
+
+                <!-- Blog Comments -->
+   <div class="form-group">
             <%= link_to 'Edit', edit_blog_path(@blog), :class=>"btn btn-sm btn-success" %> 
 			<%= link_to 'Back', blogs_path, :class=>"btn btn-sm btn-danger" %>
               <br><br>
 
             </div>
+                <!-- Comments Form -->
+           
 
-         </div>
-</div>
-</div>
+                <hr>
+
+                <!-- Posted Comments -->
+
+
+
+      <div class="col-md-6 comment_box">
+        <strong>Comments:</strong>
+        <hr style="  margin-top: 5px;">
+        <%= form_tag "post_comment", onsubmit: "createBlogcomment();return(false);", :id => "comment", :class =>"form-horizontal" do %>
+          <%= hidden_field_tag :blog_id,@blog.id %>
+          <div class="addCommentBlock">
+            <div class="form-group">
+               <%= text_area_tag :comment,nil,:rows=>"4" ,:style => "width:365px",:maxlength=> "65530" ,:style=>"overflow: hidden;word-wrap: break-word;resize: none;height: 54px;  width: 100%;",:id=> "body", :placeholder=> "Comment",:required=> true,:class=> "form-control"%>
+            </div>
+            <div class="form-group">
+               <%= text_field_tag :name,nil,:id=> "name", :placeholder=> "Name",:required=> true,:class=> "form-control"%>
+            </div>
+            <div class="form-group">
+              <button class="btn btn-success detailViewSaveComment" type="save" data-mode="add" style="  margin-top: 4px;padding-top: 4px;padding-bottom: 4px;">
+                <strong>Post</strong>
+              </button>
+            </div>
+          </div>
+          <hr>
+        <% end %>
+        <div id="comment_load" style="overflow: auto; height: 300px; margin: 10px 0px;">
+          <%if @blog_comments.empty? %>
+            <div class="commentDetails" style="text-align:center"> No comments</div>
+          <% else %>
+            <%= render "blog_comments"%>
+          <% end %>
+        </div>
+      </div>
+
+            </div>
 
 
 
 
+
+
+
+
+<script type="text/javascript">
+	     function createBlogcomment(){
+           if ($('#body').val() == ''){
+            alert("Please enter an comment")
+            return false;
+           }
+           else{
+
+            $.ajax( {
+              type: "POST",
+              url: '/blogs/post_comment',
+              data: $("#comment").serialize(),
+              success: function( response ) {
+
+             
+                 $('#body').val('');
+                 $('#name').val('');
+                 $('#loadingDiv').hide();
+              },
+              error: function(response){
+
+              }
+            });
+          }
+
+        }
+</script>
+<style type="text/css">
+  
+.comment_box{border-radius:2px;-webkit-box-shadow:1px 1px 3px #ddd;-moz-box-shadow:1px 1px 3px #ddd;box-shadow:1px 1px 3px #ddd;border:1px solid #eaeaea;background:#fff;margin-bottom:100px;padding:15px}
+ .addCommentBlock{background-color:#eeeff2;background-image:-moz-linear-gradient(top,#eeeff2,#eeeff2);background-image:-ms-linear-gradient(top,#eeeff2,#eeeff2);background-image:-webkit-gradient(linear,0 0,0 100%,from(#eeeff2),to(#eeeff2));background-image:-webkit-linear-gradient(top,#eeeff2,#eeeff2);background-image:-o-linear-gradient(top,#eeeff2,#eeeff2);background-image:linear-gradient(top,#eeeff2,#eeeff2);background-repeat:repeat-x;filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#eeeff2',endColorstr='#eeeff2',GradientType=0);border-color:#eeeff2 #eeeff2 #c3c6d1;border-color:rgba(0,0,0,0.1) rgba(0,0,0,0.1) rgba(0,0,0,0.25);border:1px solid #ddd;padding:12px 27px 5px;min-height:115px;margin-top:15px;display:block}
+.commentDetails{background:#fff;border:1px solid #ddd;margin-bottom:5px;border-radius:2px;padding:10px 10px 5px;display:inline-block;width:100%;-webkit-box-sizing:border-box;-moz-box-sizing:border-box;box-sizing:border-box;word-wrap:break-word}
+.commentDetails .commentDiv{width:100%}
+</style>
